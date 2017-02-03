@@ -33,11 +33,21 @@ function validation(target,complete){
 			
 			$(this).find("input").each(function(){
 				
+				var type =  $(this).attr("type");
 				var must =  $(this).attr("must");
 				
 				if(must == 'true'){
 					
-					var value =  $(this).val();
+					var value = ''
+					
+					if (type == 'radio'){
+						
+						var name =  $(this).attr("name");
+						value = $("input[name='"+name+"']:checked").val()						
+						
+					}else{
+						value =  $(this).val();
+					}
 					
 					if(value == '' || value == null){
 						isValid = false;
@@ -46,6 +56,7 @@ function validation(target,complete){
 							isAppend = true;
 						}
 					}
+					
 				}
 			});//input
 			
@@ -54,12 +65,8 @@ function validation(target,complete){
 				var must =  $(this).attr("must");
 				
 				if(must == 'true'){
-				
-				
-					
+
 				var value =  $(this).val();
-								
-				
 				
 				if(value == '' || value == null){
 					isValid = false;

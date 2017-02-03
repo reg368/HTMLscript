@@ -34,25 +34,34 @@ function genJson(target){
 	$(target+' tr').each(function() {
 
 		var obj = {};
-		var isInput = false;
+		var isSave = false;
 
 		$(this).find("input").each(function(){
-			isInput = true;
+			isSave = true;
 			var key =  $(this).attr("name");
 			var value =  $(this).val();
 			var type = $(this).attr("type");
 			
-			if(type == 'radio'){
-				if($(this).prop("checked")){
-					key =  $(this).attr("class");
+			if(type != 'button'){
+				if(type == 'radio'){
+					if($(this).prop("checked")){
+						key =  $(this).attr("class");
+						obj[key] = value;
+					}	
+				}else{
 					obj[key] = value;
-				}	
-			}else{
-				obj[key] = value;
+				}
 			}
+		}); 
+		
+		$(this).find("select").each(function(){
+			isSave = true;
+			var key =  $(this).attr("name");
+			var value = $(this).val();
+			obj[key] = value
 		});
 		
-		if(isInput)
+		if(isSave)
 			array.push(obj);
 
 	});
