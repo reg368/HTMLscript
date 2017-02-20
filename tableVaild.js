@@ -113,7 +113,7 @@ function validation(target,complete){
  * @param complete : 驗證完成call back method. 傳入 isValid 告知是否合格 
  * 
  * 例: 
- * 	validation('#formTable',function (isVaild){
+ * 	validationWithAlertItem('#formTable',function (isVaild){
  *  	if(isVaild){
  *  		//do something
  *  	}else{
@@ -174,6 +174,23 @@ function validationWithAlertItem(target,complete){
 				}
 			});//select
 
+
+			$(this).find("textarea").each(function(){
+				
+				var must =  $(this).attr("must");
+				var item =  $(this).attr("item");
+				
+				if(must == 'true'){
+
+				var value =  $(this).val();
+				
+				if(value == '' || value == null){
+					isValid = false;
+					alertItem[item]	= true;
+				  }
+				}
+			});//textarea
+			
 			
 		});//td
 		
@@ -187,3 +204,38 @@ function validationWithAlertItem(target,complete){
 	
 	complete(isValid);
 }
+
+
+/**範例:
+ * <input type="file" id="rocIdFileSeq" />
+ * 
+ * $('#rocIdFileSeq').bind('change', function() {
+		  uploadFileVaild($(this),'pdf',this.files[0].size);
+	});
+ @param input 欄位
+ @param 限定的格式
+ @param 檔案大小
+上傳檔案的檢查 (檢查不過就把input file 欄位設為空值)
+ */
+function uploadFileVaild(input,format,size){
+	
+	 var filename = input.val().split('\\').pop(); //取得檔案名稱
+	
+	 var fileformat = filename.split('.').pop();   //取得檔案副檔名
+	 
+	 fileformat = fileformat.toLowerCase();
+	 
+	 if(fileformat != format){
+		 input.val('');
+		 alert('上傳格式錯誤, 僅允許上傳 '+format+' 檔');
+		 return false;
+	 }
+
+	 //單位 byte (目前限制不可超過 1024(byte) * 1024(byte) * 2 : 2m )
+	 if(size > 2097152){
+		 input.val('');
+		 alert('上傳檔案大小超過限制');
+		 return false;
+	 }
+}
+
